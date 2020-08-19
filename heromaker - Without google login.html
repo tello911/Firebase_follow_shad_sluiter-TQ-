@@ -1,0 +1,404 @@
+<html>
+    <head>
+        <!-- jQuery,Bootstrap,Firebase-->
+        <!--jQuery-->
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <!--Bootstrap-->
+        <!-- Latest compiled and minified CSS -->
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+            <!-- Optional theme -->
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+            <!-- Latest compiled and minified JavaScript -->
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <!-- The core Firebase JS SDK is always required and must be listed first -->
+            <script src="https://www.gstatic.com/firebasejs/7.18.0/firebase-app.js"></script>
+            <script src="https://www.gstatic.com/firebasejs/7.18.0/firebase-analytics.js"></script>
+            <!-- Add Firebase products that you want to use -->
+            <script src="https://www.gstatic.com/firebasejs/7.18.0/firebase-auth.js"></script>
+            <script src="https://www.gstatic.com/firebasejs/7.18.0/firebase-firestore.js"></script>
+            <script src="https://www.gstatic.com/firebasejs/7.18.0/firebase-database.js"></script>
+            
+            <!-- TODO: Add SDKs for Firebase products that you want to use
+                https://firebase.google.com/docs/web/setup#available-libraries -->
+            
+
+            <script>
+            // Your web app's Firebase configuration
+            var firebaseConfig = {
+                apiKey: "Use your own config",
+                authDomain: "Use your own config",
+                databaseURL: "Use your own config",
+                projectId: "Use your own config",
+                storageBucket: "Use your own config",
+                messagingSenderId: "Use your own config",
+                appId: "Use your own config",
+                measurementId: "Use your own config"
+            };
+            // Initialize Firebase
+            firebase.initializeApp(firebaseConfig);
+            firebase.analytics();
+            </script>
+
+    </head>
+    <body>
+        <!--Modal-->
+        <!-- Button trigger modal -->
+
+        <div class="modal fade" id="editHero" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  <h4 class="modal-title">Edit Hero Attributes</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="container col-md-12" id="add-hero">
+                        <div class="well">
+                            <h3>Edit this Hero</h3>
+                            <form>
+                                <input type="hidden" class="form-control" id="heroid" >
+
+                                <div class="form-group">
+                                <label for="edit-inputHeroName">Hero Name</label>
+                                <input type="text" class="form-control" id="edit-inputHeroName" placeholder="Hero's Name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="edit-hero-race">Hero Race</label>
+                                    <select class="form-control" id="edit-hero-race">
+                                        <option value="Wizard">Wizard</option>
+                                        <option value="Orc">Orc</option>
+                                        <option value="Elf">Elf</option>
+                                        <option value="Cyclopes">Cyclopes</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="edit-hero-profession">Hero Professions</label>
+                                    <select class="form-control" id="edit-hero-profession">
+                                        <option value="Armorer">Armorer</option>
+                                        <option value="Cobbler">Cobbler</option>
+                                        <option value="Healer">Healer</option>
+                                        <option value="Tanker">Tanker</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="edit-hero-strength">Hero Strength : <span class="attrib-value" id="value1">50</span></label>
+                                    <input type="range" min="1" max="100" value="50" class="form-control hero-sss" id="edit-heroStrength" name="hero-strength">
+                                </div>
+                                <div class="form-group">
+                                    <label for="edit-hero-speed">Hero Speed : <span class="attrib-value" id="value2">50</span></label>
+                                    <input type="range" min="1" max="100" value="50" class="form-control hero-sss" id="edit-heroSpeed" name="hero-speed">
+                                </div>
+                                <div class="form-group">
+                                    <label for="edit-hero-stamina">Hero Stamina : <span class="attrib-value" id="value3">50</span></label>
+                                    <input type="range" min="1" max="100" value="50" class="form-control hero-sss" id="edit-heroStamina" name="hero-stamina">
+                                </div>
+                                <div class="checkbox">
+                                    <label>
+                                        <input id="edit-is-deity" type="checkbox"> Is Deity
+                                    </label>
+                                    </div>
+                                <button id= "edit-hero-button" type="button" data-dismiss="modal" class="btn btn-primary btn-block">Create New Hero</button>
+                                
+                            </form>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+              </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
+
+        <!--Login form-->
+        <div class="container" id="login-form">
+            <div class="well">
+                <h3>Please login first</h3>
+                <form>
+                    <div class="form-group">
+                    <label for="inputEmail">Email address</label>
+                    <input type="email" class="form-control" id="inputEmail" placeholder="Email">
+                    </div>
+                    <div class="form-group">
+                    <label for="inputPassword">Password</label>
+                    <input type="password" class="form-control" id="inputPassword" placeholder="Password">
+                    </div>
+                    <!--div class="form-group">
+                    <label for="exampleInputFile">File input</label>
+                    <input type="file" id="exampleInputFile">
+                    <p class="help-block">Example block-level help text here.</p>
+                    </div>
+                    <div class="checkbox">
+                    <label>
+                        <input type="checkbox"> Check me out
+                    </label>
+                    </div-->
+                    <button id= "sign-in-button" type="button" class="btn btn-primary btn-block">Sign in</button>
+                    <button id= "create-newuser-button" type="button" class="btn btn-warning btn-block">Create New Account</button>
+                    <button id= "google-login-button" type="button" class="btn btn-primary btn-block">Use Google Account</button>
+                    <button id= "logout-button" type="button" class="btn btn-danger btn-block">Log Out</button>
+                </form>
+            </div>
+            
+        </div>
+
+        <div class="container well" id="show-heroes">
+            <h3>Show heroes here</h3>
+        </div>
+
+        <div class="container" id="add-hero">
+            <div class="well">
+                <h3>Create a new Hero</h3>
+                <form>
+                    <div class="form-group">
+                    <label for="inputHeroName">Hero Name</label>
+                    <input type="text" class="form-control" id="inputHeroName" placeholder="Hero's Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="hero-race">Hero Race</label>
+                        <select class="form-control" id="hero-race">
+                            <option value="Wizard">Wizard</option>
+                            <option value="Orc">Orc</option>
+                            <option value="Elf">Elf</option>
+                            <option value="Cyclopes">Cyclopes</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="hero-profession">Hero Professions</label>
+                        <select class="form-control" id="hero-profession">
+                            <option value="Armorer">Armorer</option>
+                            <option value="Cobbler">Cobbler</option>
+                            <option value="Healer">Healer</option>
+                            <option value="Tanker">Tanker</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="hero-strength">Hero Strength : <span class="attrib-value" id="value1">50</span></label>
+                        <input type="range" min="1" max="100" value="50" class="form-control hero-sss" id="heroStrength" name="hero-strength">
+                    </div>
+                    <div class="form-group">
+                        <label for="hero-speed">Hero Speed : <span class="attrib-value" id="value2">50</span></label>
+                        <input type="range" min="1" max="100" value="50" class="form-control hero-sss" id="heroSpeed" name="hero-speed">
+                    </div>
+                    <div class="form-group">
+                        <label for="hero-stamina">Hero Stamina : <span class="attrib-value" id="value3">50</span></label>
+                        <input type="range" min="1" max="100" value="50" class="form-control hero-sss" id="heroStamina" name="hero-stamina">
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input id="is-deity" type="checkbox"> Is Deity
+                        </label>
+                        </div>
+                    <button id= "create-new-hero-button" type="button" class="btn btn-primary btn-block">Create New Hero</button>
+                    
+                </form>
+            </div>
+            
+        </div>
+        
+        <script type="text/javascript">
+
+                var currentUser={};
+                //Create New User
+                $('#create-newuser-button').click(function(){
+                        var email = $('#inputEmail').val();
+                        var password = $('#inputPassword').val();
+                       // alert(email+"  "+password)
+                        CreateNewUser(email,password);
+                    });
+
+                function CreateNewUser(email,password){
+                firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
+                // Handle Errors here.
+                    var errorCode = error.code;
+                    var errorMessage = error.message;
+                    // ...
+                    console.log(errorMessage);
+                });
+
+                }
+
+                firebase.auth().onAuthStateChanged(function(user) {
+                    if (user) {
+                        // User is signed in.
+                        var email = user.email;
+                        currentUser=user;
+                        writeUserData(user);
+                        console.log(currentUser.email+"  has logged in");
+                        
+                        // ...
+                    } else {
+                        // User is signed out.
+                        // ...
+                    }
+                });
+
+                //Sign In User
+                $('#sign-in-button').click(function(){
+                        var email = $('#inputEmail').val();
+                        var password = $('#inputPassword').val();
+                       // alert(email+"  "+password)
+                        SignInUser(email,password);
+                });
+
+                function SignInUser(email,password){
+                    firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+                        // Handle Errors here.
+                        var errorCode = error.code;
+                        var errorMessage = error.message;
+                        // ...
+                        alert(errorMessage);
+                    });
+                }
+
+                //Log Out
+                $('#logout-button').click(function(){
+                    console.log("User has logged out");
+                    firebase.auth().signOut();
+                })
+                
+                //Write User email or info to database
+                function writeUserData(user){
+                    firebase.database().ref('users/' + user.uid).set({
+                        email: user.email
+                    });
+                }
+
+                //Change value according to slider
+                /*$('#heroStrength').change(function(){
+                    document.getElementById('value1').innerHTML=$('#heroStrength').val();
+                })
+
+                $('#heroSpeed').change(function(){
+                    document.getElementById('value2').innerHTML=document.getElementById('heroSpeed').value;
+                })
+
+                $('#heroStamina').change(function(){
+                    document.getElementById('value3').innerHTML=document.getElementById('heroStamina').value;
+                })*/
+
+                $(".hero-sss").on("change input",function(){
+                    var currentValue=$(this).val();
+                    $(this).parent().find("span").text(currentValue);
+                })
+                //Create new hero
+                $('#create-new-hero-button').click(function(){
+                    //Get value from input
+                    var hero={
+                        id : $("#inputHeroName").val() + Date.now(),
+                        owner : currentUser.uid,
+                        name : $("#inputHeroName").val(), /* or use document.getElementById('#inputHeroName').value*/
+                        race : $("#hero-race").val(),
+                        profession : $("#hero-profession").val(),
+                        strength : $("#heroStrength").val(),
+                        speed : $("#heroSpeed").val(),
+                        stamina : $("#heroStamina").val(),
+                        deity : $("#is-deity").prop("checked")
+                    }
+
+                    //Write values to database
+                    addHeroToDatabase(hero);
+                    alert("New Hero is Created!");
+                })
+           
+                function addHeroToDatabase(h){
+                    firebase.database().ref("heroes/" + h.id).set(h);
+                    firebase.database().ref("users/" + currentUser.uid+"/heroes/"+h.id).set(h);
+                }
+
+                //Show heroes on screen
+                var heroReference = firebase.database().ref().child("heroes");
+                    heroReference.on("value",function(snapshot){
+                        $("#show-heroes").empty();
+                        var heroHTMLitem="<h3>HERE ARE ALL OF MY HEROES' COLLECTION</h3>"
+
+                        snapshot.forEach(function(childsnapshot){
+                            var person = childsnapshot.val();
+                            heroHTMLitem += "<div class='heroHTMLitem'><hr><ul>";
+                            heroHTMLitem += "<li>Name: <span class='hero-data-name'>" + person.name + "</span></li>";
+                            heroHTMLitem += "<li>Race: <span class='hero-data-race'>" + person.race + "</span></li>";
+                            heroHTMLitem += "<li>Profession: <span class='hero-data-profession'>" + person.profession + "</span></li>";
+                            heroHTMLitem += "<li>Strength: <span class='hero-data-strength'>" + person.strength + "</span></li>";
+                            heroHTMLitem += "<li>Speed: <span class='hero-data-speed'>" + person.speed + "</span></li>";
+                            heroHTMLitem += "<li>Stamina: <span class='hero-data-stamina'>" + person.stamina + "</span></li>";
+                            heroHTMLitem += "<li>Is Deity: <span class='hero-data-deity'>" + person.deity + "</span></li>";
+                            heroHTMLitem += "</ul>";        
+                            heroHTMLitem += "<button type='button' class='btn btn-danger delete-hero' id='" + person.id + "'>Delete Me</button>&nbsp";
+                            heroHTMLitem += "<button type='button' class='btn btn-primary edit-hero-button' data-heroid='"+person.id+"' data-toggle='modal' data-target='#editHero'>Edit me!</button>";
+                            heroHTMLitem += "</div>";
+                        });
+                        $("#show-heroes").html(heroHTMLitem);
+                    })     
+                
+                //Delete hero action
+                $(document).on("click",".delete-hero",function(){
+                    if(confirm("Are you sure?")){
+                        var heroID = $(this).attr('id');
+                        alert(heroID+" is in good hands");
+                        firebase.database().ref("heroes/" + heroID).remove();
+                        firebase.database().ref("users/" + currentUser.uid+"/heroes/"+heroID).remove();
+                    }else{
+                        alert("Your hero is safe in our care");
+                    }
+                });
+
+                //Edit hero action
+                $(document).on("click",".edit-hero-button",function(){
+                    var heroid = $(this).attr("data-heroid");
+                    console.log("You clicked the edit button for "+ heroid);
+                    $("#heroid").val(heroid);
+                    
+                    var heroName = $(this).parent().find(".hero-data-name").text();
+                    $("#edit-inputHeroName").val(heroName);
+
+                    var heroRace = $(this).parent().find(".hero-data-race").text();
+                    $("#edit-hero-race").val(heroRace).change();
+
+                    var heroProfession = $(this).parent().find(".hero-data-profession").text();
+                    $("#edit-hero-profession").val(heroProfession).change();
+
+                    var heroStrength = $(this).parent().find(".hero-data-strength").text();
+                    $("#edit-hero-strength").val(heroStrength).change();
+
+                    var heroSpeed = $(this).parent().find(".hero-data-speed").text();
+                    $("#edit-hero-speed").val(heroSpeed).change();
+
+                    var heroStamina = $(this).parent().find(".hero-data-stamina").text();
+                    $("#edit-hero-stamina").val(heroStamina);
+
+                    var heroDeity = $(this).parent().find(".hero-data-deity").text();
+                    if(heroDeity == "true"){
+                        $("#edit-is-deity").attr("checked",true);
+                    }else{
+                        $("#edit-is-deity").attr("checked",false);
+                    }
+                });  
+
+                $("#edit-hero-button").click(function(){
+                    //Get value from input
+                    var hero={
+                        id : $("#heroid").val(),
+                        owner : currentUser.uid,
+                        name : $("#edit-inputHeroName").val(), /* or use document.getElementById('#inputHeroName').value*/
+                        race : $("#edit-hero-race").val(),
+                        profession : $("#edit-hero-profession").val(),
+                        strength : $("#edit-heroStrength").val(),
+                        speed : $("#edit-heroSpeed").val(),
+                        stamina : $("#edit-heroStamina").val(),
+                        deity : $("#edit-is-deity").prop("checked")
+                    }
+
+                    //Write values to database
+                    addHeroToDatabase(hero);
+                    alert($("#heroid").val()+"  <--  Hero is Updated!");
+                }) 
+        </script>
+
+
+    </body>
+</html>
